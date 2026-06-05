@@ -17,6 +17,9 @@ jobs:
   build:
     name: Build, test & pack
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
 
     steps:
       - name: Checkout
@@ -114,16 +117,15 @@ jobs:
             artifacts/nuget/*.snupkg
           if-no-files-found: error
 
-      - name: Publish to NuGet feed
-        if: steps.version.outputs.isRelease == 'true'
+      - name: Publish to GitHub Packages
+        # Publish on pushes to main/develop and on v* tags (never on pull requests).
+        if: github.event_name == 'push'
         shell: pwsh
         env:
-          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
-          NUGET_FEED_URL: ${{ vars.NUGET_FEED_URL }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          if ([string]::IsNullOrWhiteSpace($env:NUGET_API_KEY)) {
-            throw 'NUGET_API_KEY secret is not configured; cannot publish.'
-          }
-          $source = if ([string]::IsNullOrWhiteSpace($env:NUGET_FEED_URL)) { 'https://api.nuget.org/v3/index.json' } else { $env:NUGET_FEED_URL }
-          dotnet nuget push 'artifacts/nuget/*.nupkg' --api-key $env:NUGET_API_KEY --source $source --skip-duplicate
+          $source = 'https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json'
+          # --skip-duplicate so re-running a build for an already-published version is a no-op,
+          # not a failure (GitHub Packages versions are immutable).
+          dotnet nuget push 'artifacts/nuget/*.nupkg' --api-key $env:GITHUB_TOKEN --source $source --skip-duplicate
 
