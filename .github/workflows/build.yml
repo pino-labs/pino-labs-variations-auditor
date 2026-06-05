@@ -1,0 +1,129 @@
+name: build
+
+on:
+  push:
+    branches: [ main, develop ]
+    tags: [ 'v*' ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+env:
+  DOTNET_NOLOGO: 'true'
+  DOTNET_CLI_TELEMETRY_OPTOUT: 'true'
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 'true'
+
+jobs:
+  build:
+    name: Build, test & pack
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Build frontend bundle
+        working-directory: frontend
+        run: npm run build
+
+      - name: Restore
+        run: dotnet restore PiNo.Labs.VariationsAuditor.sln
+
+      - name: Test
+        run: dotnet test PiNo.Labs.VariationsAuditor.sln -c Release --no-restore
+
+      - name: Resolve package version
+        id: version
+        shell: pwsh
+        run: |
+          # On a v* tag, the release version is the tag without the leading 'v'.
+          # Otherwise pack uses the <Version> from the .csproj.
+          $ref = "${{ github.ref }}"
+          if ($ref -like 'refs/tags/v*') {
+            $v = $ref -replace '^refs/tags/v', ''
+            "version=$v"        | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+            "isRelease=true"    | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+            Write-Host "Release version: $v"
+          } else {
+            "version="          | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+            "isRelease=false"   | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+            Write-Host "Non-release build: using <Version> from the project file."
+          }
+
+      - name: Pack
+        shell: pwsh
+        run: |
+          $packArgs = @(
+            'src/PiNo.Labs.VariationsAuditor.Addon/PiNo.Labs.VariationsAuditor.Addon.csproj',
+            '-c', 'Release', '--no-restore', '-o', 'artifacts/nuget'
+          )
+          if ('${{ steps.version.outputs.version }}' -ne '') {
+            $packArgs += "-p:Version=${{ steps.version.outputs.version }}"
+          }
+          dotnet pack @packArgs
+
+      - name: Verify package contents
+        shell: pwsh
+        run: |
+          $pkg = Get-ChildItem artifacts/nuget -Filter *.nupkg | Sort-Object LastWriteTime -Descending | Select-Object -First 1
+          if (-not $pkg) { throw 'No .nupkg produced.' }
+          $tmp = Join-Path $env:RUNNER_TEMP 'pkg-verify'
+          if (Test-Path $tmp) { Remove-Item $tmp -Recurse -Force }
+          $zip = "$($pkg.FullName).zip"; Copy-Item $pkg.FullName $zip
+          Expand-Archive $zip -DestinationPath $tmp
+          $required = @(
+            'lib/net10.0/PiNo.Labs.VariationsAuditor.Addon.dll',
+            'lib/net10.0/PiNo.Labs.VariationsAuditor.Core.dll',
+            'buildTransitive/PiNo.Labs.VariationsAuditor.Addon.targets',
+            'contentFiles/any/any/modules/_protected/PiNo.Labs.VariationsAuditor/module.config'
+          )
+          foreach ($r in $required) {
+            if (-not (Test-Path (Join-Path $tmp ($r -replace '/', [IO.Path]::DirectorySeparatorChar)))) {
+              throw "Missing required package entry: $r"
+            }
+          }
+          # The embedded React bundle must live in the Core assembly.
+          $core = Join-Path $tmp 'lib/net10.0/PiNo.Labs.VariationsAuditor.Core.dll'
+          $bytes = [IO.File]::ReadAllBytes($core)
+          $ascii = [Text.Encoding]::ASCII.GetString($bytes)
+          if ($ascii -notmatch 'EmbeddedFrontend\.index\.html') { throw 'Embedded UI bundle missing from Core.dll.' }
+          Write-Host "Package OK: $($pkg.Name)"
+
+      - name: Upload package artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: nuget-package
+          path: |
+            artifacts/nuget/*.nupkg
+            artifacts/nuget/*.snupkg
+          if-no-files-found: error
+
+      - name: Publish to NuGet feed
+        if: steps.version.outputs.isRelease == 'true'
+        shell: pwsh
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+          NUGET_FEED_URL: ${{ vars.NUGET_FEED_URL }}
+        run: |
+          if ([string]::IsNullOrWhiteSpace($env:NUGET_API_KEY)) {
+            throw 'NUGET_API_KEY secret is not configured; cannot publish.'
+          }
+          $source = if ([string]::IsNullOrWhiteSpace($env:NUGET_FEED_URL)) { 'https://api.nuget.org/v3/index.json' } else { $env:NUGET_FEED_URL }
+          dotnet nuget push 'artifacts/nuget/*.nupkg' --api-key $env:NUGET_API_KEY --source $source --skip-duplicate
+
