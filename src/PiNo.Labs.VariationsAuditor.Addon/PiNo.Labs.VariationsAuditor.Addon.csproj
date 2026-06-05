@@ -1,0 +1,75 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <!-- Annotation context (not full nullable analysis) so the shared source's (?) annotations compile. -->
+    <Nullable>annotations</Nullable>
+    <!-- Keep deterministic so embedded resource names match VariationsAuditorAssets' lookup. -->
+    <RootNamespace>PiNo.Labs.VariationsAuditor.Addon</RootNamespace>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <IsPackable>true</IsPackable>
+    <PackageId>PiNo.Labs.VariationsAuditor.Addon</PackageId>
+    <!-- Experimental pre-release. The "-experimental" SemVer suffix marks this package as not
+         production-ready; NuGet treats it as a pre-release (hidden unless pre-releases are included). -->
+    <Version>0.0.1-experimental</Version>
+    <AssemblyVersion>0.0.1.0</AssemblyVersion>
+    <FileVersion>0.0.1.0</FileVersion>
+    <Authors>PiNo Labs Team</Authors>
+    <Company>PiNo Labs</Company>
+    <Product>PiNo Labs Optimizely CMS 13 Variations Auditor (Experimental)</Product>
+    <Description>[EXPERIMENTAL — not production-ready] Optimizely CMS 13 shell add-on that audits content variations site-wide: lists every variant, flags structural divergence and stale-override reversion risk, and runs safe, previewed bulk actions (Promote / Unpublish / Delete) with workflow, lock and ACL gating. The React UI is embedded in the assembly and served from the package - no wwwroot copy step required. Self-registers as a protected shell module, so it works with zero configuration in the consuming site. This is an experimental/preview release: APIs, behaviour and packaging may change without notice.</Description>
+    <Copyright>Copyright (c) PiNo Labs</Copyright>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageTags>Optimizely;EPiServer;CMS;CMS13;Addon;ShellModule;Variations;Auditor;Graph;Experimental;Preview</PackageTags>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageProjectUrl>https://pino-labs.com</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/pino-labs/pino-labs-variations-auditor</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+
+    <!-- Deterministic, reproducible packages with source link + embedded symbols for CI. -->
+    <Deterministic>true</Deterministic>
+    <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);NU5100;NU5118</NoWarn>
+
+    <!-- Bundle the referenced Core project's DLL into this package's lib/ folder (it is referenced with
+         PrivateAssets="all" below, so it is NOT emitted as a package dependency). -->
+    <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);IncludeVariationsAuditorCoreInPackage</TargetsForTfmSpecificBuildOutput>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <!-- These remain DECLARED here so they appear as dependencies in the addon's nuspec for the consuming
+         site. Core references the same packages for its own compilation. -->
+    <PackageReference Include="EPiServer.CMS" Version="13.0.2" />
+    <PackageReference Include="EPiServer.Cms.UI.AspNetIdentity" Version="13.0.2" />
+    <PackageReference Include="EPiServer.OptimizelyIdentity" Version="13.0.2" />
+    <PackageReference Include="Optimizely.Graph.Cms.Query" Version="13.0.2" />
+  </ItemGroup>
+
+  <!--
+    Reference the single shared library. PrivateAssets="all" keeps Core OUT of the nuspec dependency list
+    (it is not published as its own package); instead its DLL is bundled into lib/ via the target below.
+    This is what makes the addon a thin packaging wrapper over ONE compiled assembly.
+  -->
+  <ItemGroup>
+    <ProjectReference Include="..\PiNo.Labs.VariationsAuditor.Core\PiNo.Labs.VariationsAuditor.Core.csproj"
+                      PrivateAssets="all" />
+  </ItemGroup>
+
+  <Target Name="IncludeVariationsAuditorCoreInPackage">
+    <ItemGroup>
+      <BuildOutputInPackage Include="$(OutputPath)PiNo.Labs.VariationsAuditor.Core.dll" />
+    </ItemGroup>
+  </Target>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="/" />
+    <None Include="buildTransitive\PiNo.Labs.VariationsAuditor.Addon.targets" Pack="true" PackagePath="buildTransitive/" />
+    <!-- Optimizely module manifest is still mirrored to the consumer's modules/_protected folder. -->
+    <Content Include="contentFiles\any\any\modules\_protected\PiNo.Labs.VariationsAuditor\**\*.*" Pack="true" PackagePath="contentFiles/any/any/modules/_protected/PiNo.Labs.VariationsAuditor/" />
+  </ItemGroup>
+</Project>

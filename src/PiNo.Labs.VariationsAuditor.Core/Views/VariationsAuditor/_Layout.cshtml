@@ -1,0 +1,43 @@
+@using EPiServer.Framework.Web.Resources
+@addTagHelper *, EPiServer.Shell.UI
+@*
+    Self-contained CMS 13 shell layout for the Variations Auditor module.
+
+    FULL SEPARATION: this layout is COMPILED INTO PiNo.Labs.VariationsAuditor.Core.dll (Razor Class
+    Library) and shipped inside the NuGet package, so it works in ANY clean CMS 13 host with no host
+    views. It references ONLY CMS shell client resources (ShellCore / ShellCoreLightTheme) and the
+    EPiServer <platform-navigation /> tag helper — never any consuming-site asset (e.g. Foundation's
+    wwwroot vendor scripts). The React SPA brings its own styles/JS.
+
+    It lives under a module-unique folder (Views/VariationsAuditor/) and is selected explicitly by the
+    page via `Layout = "/Views/VariationsAuditor/_Layout.cshtml"`, so it can never collide with or be
+    shadowed by a host _ViewStart / _Layout.
+*@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Variations Auditor</title>
+
+    @* CMS 13 shell resources required by <platform-navigation /> — provided by the host's CMS UI packages. *@
+    @ClientResources.RenderResources("ShellCore")
+    @ClientResources.RenderResources("ShellCoreLightTheme")
+
+    @RenderSection("AdditionalStyles", false)
+    <style>
+        body { margin: 0; overflow: auto !important; }
+    </style>
+</head>
+<body class="epi-workspace">
+    @Html.AntiForgeryToken()
+    <platform-navigation />
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div style="padding-top: 56px; width: 100%; display: block;">
+        @RenderBody()
+    </div>
+    @RenderSection("AdditionalScripts", false)
+</body>
+</html>
+

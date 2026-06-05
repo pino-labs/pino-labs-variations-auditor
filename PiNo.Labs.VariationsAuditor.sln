@@ -1,0 +1,28 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PiNo.Labs.VariationsAuditor.Core", "src\PiNo.Labs.VariationsAuditor.Core\PiNo.Labs.VariationsAuditor.Core.csproj", "{2B9F1E55-9C2A-4E58-9D2E-7A1F0C3B4D10}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PiNo.Labs.VariationsAuditor.Addon", "src\PiNo.Labs.VariationsAuditor.Addon\PiNo.Labs.VariationsAuditor.Addon.csproj", "{7E3C1A22-4D6B-49F1-A2C7-8B5E0D9F3C21}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2B9F1E55-9C2A-4E58-9D2E-7A1F0C3B4D10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B9F1E55-9C2A-4E58-9D2E-7A1F0C3B4D10}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B9F1E55-9C2A-4E58-9D2E-7A1F0C3B4D10}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B9F1E55-9C2A-4E58-9D2E-7A1F0C3B4D10}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E3C1A22-4D6B-49F1-A2C7-8B5E0D9F3C21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E3C1A22-4D6B-49F1-A2C7-8B5E0D9F3C21}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E3C1A22-4D6B-49F1-A2C7-8B5E0D9F3C21}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E3C1A22-4D6B-49F1-A2C7-8B5E0D9F3C21}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
+

@@ -1,0 +1,26 @@
+# Build output
+[Bb]in/
+[Oo]bj/
+artifacts/
+.tmp_va_pack_verify/
+
+# EPiServer build-copied shell modules (regenerated on build; not part of the add-on)
+/src/*/modules/
+
+# NuGet
+*.nupkg
+*.snupkg
+
+# Frontend
+node_modules/
+frontend/dist/
+*.tsbuildinfo
+
+# IDE / OS
+.vs/
+.vscode/
+.idea/
+*.user
+.DS_Store
+Thumbs.db
+

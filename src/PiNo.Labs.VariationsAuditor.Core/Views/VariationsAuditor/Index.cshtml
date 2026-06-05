@@ -1,0 +1,36 @@
+@{
+    // Self-contained: explicit module layout (compiled into the addon assembly), never a host layout.
+    Layout = "/Views/VariationsAuditor/_Layout.cshtml";
+    var jsUrl = ViewData["JsUrl"] as string;
+    var cssUrl = ViewData["CssUrl"] as string;
+}
+@section AdditionalStyles {
+    @if (!string.IsNullOrEmpty(cssUrl))
+    {
+        <link rel="stylesheet" crossorigin href="@cssUrl" />
+    }
+    <style>
+        #opti-auditor-app {
+            width: 100%;
+            min-height: calc(100vh - 56px);
+            display: block;
+        }
+    </style>
+}
+
+<div id="opti-auditor-app" class="opti-auditor-root"></div>
+
+@section AdditionalScripts {
+    @if (!string.IsNullOrEmpty(jsUrl))
+    {
+        <script type="module" crossorigin src="@jsUrl"></script>
+    }
+    else
+    {
+        <p style="font-family:sans-serif;padding:2rem;color:#c00">
+            <strong>Variations Auditor bundle not found.</strong>
+            Run <code>npm run build</code> in the <code>frontend/</code> folder.
+        </p>
+    }
+}
+

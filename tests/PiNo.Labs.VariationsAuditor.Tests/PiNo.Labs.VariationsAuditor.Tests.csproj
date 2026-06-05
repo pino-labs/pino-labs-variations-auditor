@@ -1,0 +1,50 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!--
+    PiNo.Labs.VariationsAuditor.Tests
+    =================================
+    Enterprise unit/contract test suite for the Variations Auditor addon.
+
+    Design principles (corporate + Optimizely add-on guidelines):
+      * Zero third-party mocking framework. The deterministic, pure-logic units (scoring, drift matrix,
+        audit trail, models) need no test doubles; the thin controller layer is exercised with small,
+        hand-written in-memory fakes (see TestDoubles/). This keeps the suite licence-clean (only
+        MIT/Apache test tooling) and free of any telemetry/SponsorLink concerns.
+      * Tests reference the SAME shared assembly the host and the NuGet package ship
+        (PiNo.Labs.VariationsAuditor.Core), so they validate exactly what is delivered.
+      * One assembly-level InternalsVisibleTo (declared in Core.csproj) lets the suite assert the
+        embedded-UI contract and the role gate without weakening production accessibility.
+  -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+    <IsPublishable>false</IsPublishable>
+    <!-- net10 analyzers are strict; tests intentionally construct edge-case data. -->
+    <NoWarn>$(NoWarn);CA1707;xUnit1031</NoWarn>
+  </PropertyGroup>
+
+  <!-- The system under test resolves authorization, shell-navigation and Graph types, which live in the
+       ASP.NET Core shared framework. -->
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
+    <PackageReference Include="xunit" Version="2.9.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="coverlet.collector" Version="6.0.2">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\PiNo.Labs.VariationsAuditor.Core\PiNo.Labs.VariationsAuditor.Core.csproj" />
+  </ItemGroup>
+</Project>
+

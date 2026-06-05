@@ -1,0 +1,20 @@
+/* Tailwind layers. Preflight is disabled in tailwind.config.js so this injects NO global reset. */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+  All custom styles are strictly scoped under .opti-auditor-root so they cannot bleed into the
+  EPiServer host shell (Dojo / On-Page Editing).
+*/
+.opti-auditor-root {
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  color: #1f2933;
+}
+
+.opti-auditor-root *,
+.opti-auditor-root *::before,
+.opti-auditor-root *::after {
+  box-sizing: border-box;
+}
+

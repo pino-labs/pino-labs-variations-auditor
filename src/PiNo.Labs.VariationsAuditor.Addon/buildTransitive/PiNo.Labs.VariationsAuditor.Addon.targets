@@ -1,0 +1,24 @@
+<Project>
+  <!--
+    Optimizely module discovery needs module.config under modules/_protected/PiNo.Labs.VariationsAuditor/
+    RELATIVE TO THE RUNNING APP'S CONTENT ROOT — i.e. the build OUTPUT (bin) and the PUBLISH folder, NOT the
+    consumer's source tree.
+
+    Earlier this used a Copy task writing into $(MSBuildProjectDirectory)\modules\_protected\..., which
+    dirtied the consumer's working copy / git status on every build. Instead we register the manifest files
+    as None items with a Link that places them under modules\_protected\... and let MSBuild route them into
+    the output and publish directories via CopyToOutputDirectory / CopyToPublishDirectory. Nothing is ever
+    written into the consumer's source tree.
+
+    NOTE: the React UI bundle is NOT copied anywhere — it is embedded in the addon assembly and served
+    directly from the package, so installing the NuGet needs no wwwroot copy step.
+  -->
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)..\contentFiles\any\any\modules\_protected\PiNo.Labs.VariationsAuditor\**\*.*"
+          Link="modules\_protected\PiNo.Labs.VariationsAuditor\%(RecursiveDir)%(Filename)%(Extension)"
+          CopyToOutputDirectory="PreserveNewest"
+          CopyToPublishDirectory="PreserveNewest"
+          Visible="false" />
+  </ItemGroup>
+</Project>
+

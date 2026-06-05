@@ -1,0 +1,66 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+  <!--
+    PiNo.Labs.VariationsAuditor.Core
+    The shared runtime assembly: feature source, MVC shell views and the embedded React UI bundle.
+    Razor Class Library so the module's own shell views are compiled into the assembly and shipped in the
+    NuGet package, giving the consuming CMS 13 host the full shell chrome with no host views. The thin
+    PiNo.Labs.VariationsAuditor.Addon project bundles this assembly into the package's lib/ folder.
+  -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>annotations</Nullable>
+    <!-- Deterministic so the embedded-resource names stay stable for VariationsAuditorAssets' lookup. -->
+    <Deterministic>true</Deterministic>
+    <RootNamespace>PiNo.Labs.VariationsAuditor.Core</RootNamespace>
+    <AssemblyName>PiNo.Labs.VariationsAuditor.Core</AssemblyName>
+    <!-- Library project; the addon project packs it. -->
+    <IsPackable>false</IsPackable>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+
+    <!-- Vite emits the bundle into this project's private intermediate folder, from where it is embedded
+         into the assembly. The bundle is the single source of truth for the UI. -->
+    <FrontendDistDir>$(MSBuildThisFileDirectory)obj\frontend-dist</FrontendDistDir>
+    <FrontendSourceDir>$(MSBuildThisFileDirectory)..\..\frontend</FrontendSourceDir>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="EPiServer.CMS" Version="13.0.2" />
+    <PackageReference Include="EPiServer.Cms.UI.AspNetIdentity" Version="13.0.2" />
+    <PackageReference Include="EPiServer.OptimizelyIdentity" Version="13.0.2" />
+    <PackageReference Include="Optimizely.Graph.Cms.Query" Version="13.0.2" />
+  </ItemGroup>
+
+  <!-- Expose internal members (VariationsAuditorAssets, the role gate, …) to the test assembly so the suite
+       can assert the embedded-bundle contract and the authorization policy without weakening production access. -->
+  <ItemGroup>
+    <InternalsVisibleTo Include="PiNo.Labs.VariationsAuditor.Tests" />
+  </ItemGroup>
+
+  <!--
+    Embed the React bundle into the assembly under the logical folder "EmbeddedFrontend".
+    VariationsAuditorAssets resolves the embedded resources from this assembly, so the NuGet consumer
+    serves the UI straight from the DLL with no wwwroot copy step.
+  -->
+  <ItemGroup>
+    <EmbeddedResource Include="$(FrontendDistDir)\**\*.*">
+      <Link>EmbeddedFrontend\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <Visible>false</Visible>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <!--
+    Build the React bundle when it is missing and fail the build if it is still absent. Set
+    ForceFrontendBuild=true to always rebuild. pack.ps1 builds the bundle before packing.
+  -->
+  <Target Name="EnsureVariationsAuditorFrontend" BeforeTargets="BeforeBuild">
+    <Exec Condition="!Exists('$(FrontendDistDir)\index.html') Or '$(ForceFrontendBuild)' == 'true'"
+          Command="npm run build"
+          WorkingDirectory="$(FrontendSourceDir)" />
+    <Error Condition="!Exists('$(FrontendDistDir)\index.html')"
+           Text="Variations Auditor frontend build did not produce the bundle. Run 'npm run build' in frontend/ (pack.ps1 does this automatically)." />
+  </Target>
+</Project>
+
