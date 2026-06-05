@@ -17,7 +17,7 @@ namespace PiNo.Labs.VariationsAuditor.Services
         private static readonly TimeSpan CatalogueTtl = TimeSpan.FromSeconds(60);
         private const string CatalogueCacheKey = "VariationsAuditor:Audience:VisitorGroupCatalogue";
 
-        private readonly IVisitorGroupRepository? _visitorGroups; // optional — null when host has no visitor groups
+        private readonly IVisitorGroupRepository? _visitorGroups; // optional - null when host has no visitor groups
         private readonly IMemoryCache _cache;
         private readonly ILogger<VisitorGroupAudienceResolver> _logger;
 

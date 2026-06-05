@@ -99,7 +99,7 @@ namespace PiNo.Labs.VariationsAuditor.Tests.Services
             var variants = new[]
             {
                 AuditDtoBuilder.For(7).Language("en").Build(),
-                AuditDtoBuilder.For(99).Language("en").Build(), // different content — must be filtered out
+                AuditDtoBuilder.For(99).Language("en").Build(), // different content - must be filtered out
             };
 
             var matrix = _service.Build(7, variants);

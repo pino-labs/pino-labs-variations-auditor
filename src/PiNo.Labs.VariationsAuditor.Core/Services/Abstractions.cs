@@ -1,4 +1,4 @@
-// Variations Auditor — service abstractions. All bind to REAL EPiServer CMS 13 types.
+// Variations Auditor - service abstractions. All bind to REAL EPiServer CMS 13 types.
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;

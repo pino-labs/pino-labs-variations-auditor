@@ -195,7 +195,7 @@ export interface VariationQuery {
   pageSize: number;
   filter: VersionFilter;
   term: string | null;
-  // Smart filters — applied server-side before paging.
+  // Smart filters - applied server-side before paging.
   language?: string | null;
   statuses?: VersionStatus[] | null;
   divergenceStates?: DivergenceState[] | null;

@@ -18,7 +18,7 @@ namespace PiNo.Labs.VariationsAuditor.Services
         // Bounds how many index probes hit Graph at once so a cold-cache re-list cannot exhaust the HTTP
         // connection pool or trip Graph's shared rate limit (429).
         private const int MaxConcurrentProbes = 8;
-        private readonly IGraphContentClient _graph;       // optional — null when AddGraphContentClient() not called
+        private readonly IGraphContentClient _graph;       // optional - null when AddGraphContentClient() not called
         private readonly IContentVersionRepository _versions;
         private readonly IContentLoader _contentLoader;
         private readonly IMemoryCache _cache;
@@ -57,7 +57,7 @@ namespace PiNo.Labs.VariationsAuditor.Services
                 }
                 if (_graph == null)
                 {
-                    // Graph unavailable — never mislabel as Orphan; treat as deliverable.
+                    // Graph unavailable - never mislabel as Orphan; treat as deliverable.
                     return GraphStatus.Deliverable;
                 }
                 var indexed = await IsIndexedAsync(identity.ContentId, cancellationToken).ConfigureAwait(false);
@@ -108,7 +108,7 @@ namespace PiNo.Labs.VariationsAuditor.Services
                 toProbe.Add(identity.ContentId);
             }
 
-            // Bounded-concurrency probes. A Graph failure is treated as deliverable (unverified) — never an
+            // Bounded-concurrency probes. A Graph failure is treated as deliverable (unverified) - never an
             // Orphan, never a 500.
             var probeResults = new Dictionary<int, bool>();
             if (toProbe.Count > 0)

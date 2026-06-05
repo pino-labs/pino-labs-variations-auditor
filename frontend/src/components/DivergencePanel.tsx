@@ -131,7 +131,7 @@ export default function DivergencePanel({ identity, onClose, onResolved }: Props
             {pendingProp === '*' ? ' for all stale properties' : (
               <> for <span className="opti-auditor-font-mono opti-auditor-font-medium">{pendingProp}</span></>
             )}
-            ? This publishes the variation with the default&apos;s value — the inverse of Promote.
+            ? This publishes the variation with the default&apos;s value - the inverse of Promote.
           </div>
           <div className="opti-auditor-mt-2 opti-auditor-flex opti-auditor-items-center opti-auditor-gap-2">
             <Button

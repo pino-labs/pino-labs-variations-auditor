@@ -43,7 +43,7 @@ function AudienceCell({ row }: { row: VariationAuditDto }) {
 
   if (!hasName) {
     return (
-      <span className="opti-auditor-text-gray-400" title="Language variant — no targeted audience.">
+      <span className="opti-auditor-text-gray-400" title="Language variant - no targeted audience.">
         &mdash;
       </span>
     );
@@ -64,7 +64,7 @@ function AudienceCell({ row }: { row: VariationAuditDto }) {
         title={
           a.isResolved
             ? `Audience "${a.displayName}"${a.visitorGroupId ? ` (visitor group ${a.visitorGroupId})` : ''}.`
-            : `No matching audience found — name inferred from variation key "${row.variationKey ?? ''}".`
+            : `No matching audience found - name inferred from variation key "${row.variationKey ?? ''}".`
         }
       >
         {a.displayName}

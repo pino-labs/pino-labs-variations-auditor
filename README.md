@@ -1,14 +1,14 @@
 # Variations Auditor for Optimizely CMS 13
 
 > ⚠️ **Experimental / preview release (`0.0.1-experimental`).** This package is **not production-ready**.
-> APIs, behaviour and packaging may change without notice. Published as a NuGet pre-release — include
+> APIs, behaviour and packaging may change without notice. Published as a NuGet pre-release - include
 > pre-release versions to discover it. Use at your own risk and pin the exact version in production hosts.
 
 A native Optimizely CMS 13 shell add-on that audits content variations across the whole site: it lists
 every variation, surfaces structural divergence and stale-override reversion risk, and performs safe,
 previewed bulk actions (Promote / Unpublish / Delete) with workflow, lock and ACL gating.
 
-The React UI is embedded in the assembly and served from the NuGet package — there is no `wwwroot` copy
+The React UI is embedded in the assembly and served from the NuGet package - there is no `wwwroot` copy
 step and no configuration in the consuming site.
 
 ## Install
@@ -72,5 +72,5 @@ package, and uploads it as a build artifact on every push and pull request. Push
 
 ## License
 
-Apache-2.0 — see [LICENSE](LICENSE).
+Apache-2.0 - see [LICENSE](LICENSE).
 

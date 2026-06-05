@@ -49,7 +49,7 @@ namespace PiNo.Labs.VariationsAuditor.Services
         public async Task<PagedResult<VariationAuditDto>> ListVariationsAsync(VariationQuery query, CancellationToken cancellationToken = default)
         {
             // Divergence/status are computed per variant, so build DTOs for the whole (cached) variant universe,
-            // filter, then page — keeping TotalCount/paging correct.
+            // filter, then page - keeping TotalCount/paging correct.
             var universe = await _discovery.DiscoverAllAsync(cancellationToken).ConfigureAwait(false);
 
             var graphStatuses = await _graph
@@ -279,7 +279,7 @@ namespace PiNo.Labs.VariationsAuditor.Services
                 return new BulkItemResult { Identity = target, Outcome = BulkItemOutcome.Failed, Message = ex.Message };
             }
         }
-        // Promote copies the variant's DELTA (only the properties it overrides) onto the published master —
+        // Promote copies the variant's DELTA (only the properties it overrides) onto the published master -
         // the platform's "Copy changes to Original" semantics; master-only properties are preserved.
         private BulkItemResult Promote(VariantIdentity target)
         {
@@ -300,7 +300,7 @@ namespace PiNo.Labs.VariationsAuditor.Services
                     var applied = OverlayChangedProperties(variant, clone);
                     if (applied.Count == 0)
                     {
-                        return new BulkItemResult { Identity = target, Outcome = BulkItemOutcome.Success, Message = "Variant matched master — nothing to promote." };
+                        return new BulkItemResult { Identity = target, Outcome = BulkItemOutcome.Success, Message = "Variant matched master - nothing to promote." };
                     }
                     _contentRepository.Save(clone, SaveAction.Publish, AccessLevel.Publish);
                     return new BulkItemResult
@@ -313,7 +313,7 @@ namespace PiNo.Labs.VariationsAuditor.Services
                 }
             }
 
-            // No master baseline yet (e.g. a brand-new language branch) — publish the full variant as the
+            // No master baseline yet (e.g. a brand-new language branch) - publish the full variant as the
             // initial master version.
             var firstPublish = (IContent)((EPiServer.Data.Entity.IReadOnly)variant).CreateWritableClone();
             _contentRepository.Save(firstPublish, SaveAction.Publish, AccessLevel.Publish);
@@ -321,7 +321,7 @@ namespace PiNo.Labs.VariationsAuditor.Services
             {
                 Identity = target,
                 Outcome = BulkItemOutcome.Success,
-                Message = "Promoted (no master baseline yet — published the variant as the initial master version).",
+                Message = "Promoted (no master baseline yet - published the variant as the initial master version).",
             };
         }
 
@@ -453,7 +453,7 @@ namespace PiNo.Labs.VariationsAuditor.Services
             }
             return null;
         }
-        // "Sync from default" — the inverse of Promote.
+        // "Sync from default" - the inverse of Promote.
         public SyncPreview PreviewSync(SyncFromDefaultCommand cmd)
         {
             var report = _divergence.BuildReport(cmd.Target);

@@ -7,7 +7,7 @@ using Microsoft.Extensions.Options;
 
 namespace PiNo.Labs.VariationsAuditor.Services.Notifications
 {
-    // Webhook channel — posts to a Slack/Teams incoming webhook (or any JSON endpoint). Never throws.
+    // Webhook channel - posts to a Slack/Teams incoming webhook (or any JSON endpoint). Never throws.
     public sealed class WebhookNotificationChannel(
         IHttpClientFactory httpClientFactory,
         IOptions<VariationsAuditorNotificationOptions> options,
@@ -64,7 +64,7 @@ namespace PiNo.Labs.VariationsAuditor.Services.Notifications
         }
     }
 
-    // Email channel — SMTP via System.Net.Mail. Disabled unless host/from are set.
+    // Email channel - SMTP via System.Net.Mail. Disabled unless host/from are set.
     public sealed class EmailNotificationChannel(
         IOptions<VariationsAuditorNotificationOptions> options,
         ILogger<EmailNotificationChannel> logger)
@@ -135,7 +135,7 @@ namespace PiNo.Labs.VariationsAuditor.Services.Notifications
         public Task<bool> SendAsync(NotificationMessage message, CancellationToken cancellationToken = default)
         {
             _logger.LogInformation(
-                "VariationsAuditor notification [{Severity}] {Title} — {Body} (recipient={Recipient}, link={Link})",
+                "VariationsAuditor notification [{Severity}] {Title} - {Body} (recipient={Recipient}, link={Link})",
                 message.Severity, message.Title, message.Body, message.Recipient ?? "(none)", message.Link ?? "(none)");
             return Task.FromResult(true);
         }

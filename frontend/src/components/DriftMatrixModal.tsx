@@ -76,7 +76,7 @@ export default function DriftMatrixModal({ contentId, onClose }: Props) {
     <Modal
       size="xl"
       title="Language drift matrix"
-      subtitle={`${matrix?.contentName ?? `#${contentId}`} — languages × variations`}
+      subtitle={`${matrix?.contentName ?? `#${contentId}`} - languages × variations`}
       onClose={onClose}
       ariaLabel="Language drift matrix"
       footer={

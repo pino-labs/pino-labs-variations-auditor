@@ -19,7 +19,7 @@ namespace PiNo.Labs.VariationsAuditor.Services
         private const int MaxVersionsPerContent = 200;
         private static readonly TimeSpan DiscoveryCacheTtl = TimeSpan.FromSeconds(60);
         private const string DiscoveryCacheKey = "VariationsAuditor:Discovery:AllVariants";
-        private readonly IGraphContentClient _graph;       // optional — null when AddGraphContentClient() not called
+        private readonly IGraphContentClient _graph;       // optional - null when AddGraphContentClient() not called
         private readonly IContentVersionRepository _versions;
         private readonly IContentLoader _contentLoader;
         private readonly IMemoryCache _cache;
@@ -108,7 +108,7 @@ namespace PiNo.Labs.VariationsAuditor.Services
                 return Dedupe(fromGraph);
             }
 
-            // Graph returned nothing — fall back to an in-process content-tree walk.
+            // Graph returned nothing - fall back to an in-process content-tree walk.
             var fromTree = EnumerateInProcess();
             _logger.LogInformation(
                 "VariationsAuditor: Graph returned 0 content; in-process tree walk enumerated {Count} content item(s).",

@@ -146,7 +146,7 @@ export default function BulkActionModal({ action, targets, onClose, onDone }: Pr
           {isPromote && (
             <div className="opti-auditor-mb-3 opti-auditor-rounded-md opti-auditor-border opti-auditor-border-gray-200 opti-auditor-bg-gray-50 opti-auditor-p-2.5 opti-auditor-text-xs opti-auditor-text-gray-600">
               <span className="opti-auditor-font-medium opti-auditor-text-gray-800">Promote (Merge)</span>{' '}
-              — copies only the properties this variant overrides onto master and preserves every other master
+              - copies only the properties this variant overrides onto master and preserves every other master
               property. This mirrors the platform&apos;s &ldquo;Copy changes to Original&rdquo; delta semantics.
             </div>
           )}
@@ -186,7 +186,7 @@ export default function BulkActionModal({ action, targets, onClose, onDone }: Pr
                 checked={forceOverwriteStale}
                 onChange={(e) => setForceOverwriteStale(e.target.checked)}
               />
-              I understand the reversion risk — force overwrite stale properties.
+              I understand the reversion risk - force overwrite stale properties.
             </label>
           )}
         </>

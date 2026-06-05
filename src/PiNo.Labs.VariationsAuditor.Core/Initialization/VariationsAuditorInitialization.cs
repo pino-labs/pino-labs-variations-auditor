@@ -47,7 +47,7 @@ namespace PiNo.Labs.VariationsAuditor.Initialization
             services.AddSingleton<Services.Notifications.INotificationDispatcher, Services.Notifications.NotificationDispatcher>();
 
             // The controllers/MenuProvider/IStartupFilter live in THIS addon DLL, which ASP.NET Core's default
-            // part discovery is not guaranteed to scan — register it explicitly (guarded against duplicates so
+            // part discovery is not guaranteed to scan - register it explicitly (guarded against duplicates so
             // the Foundation host, which auto-discovers it, does not get AmbiguousMatchException at routing).
             RegisterApplicationPart(services);
 

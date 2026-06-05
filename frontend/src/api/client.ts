@@ -13,7 +13,7 @@ import type {
   VariationQuery,
 } from './types';
 
-// Runs inside the authenticated shell context — credentials are carried by the host session cookie.
+// Runs inside the authenticated shell context - credentials are carried by the host session cookie.
 const BASE = '/api/auditor';
 
 function getCsrfToken(): string {

@@ -127,7 +127,7 @@ namespace PiNo.Labs.VariationsAuditor.Services
 
                 var message = new NotificationMessage
                 {
-                    Title = $"Variation drift: \"{contentName}\" — {audienceLabel}",
+                    Title = $"Variation drift: \"{contentName}\" - {audienceLabel}",
                     Body = $"The default of \"{contentName}\" was just published, which left the {audienceLabel} variation " +
                            $"({identity.LanguageBranch}) showing outdated content for {stale.Count} propert" +
                            (stale.Count == 1 ? "y" : "ies") + $": [{string.Join(", ", stale)}]. " +

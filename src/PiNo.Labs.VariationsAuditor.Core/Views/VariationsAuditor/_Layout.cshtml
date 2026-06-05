@@ -6,7 +6,7 @@
     FULL SEPARATION: this layout is COMPILED INTO PiNo.Labs.VariationsAuditor.Core.dll (Razor Class
     Library) and shipped inside the NuGet package, so it works in ANY clean CMS 13 host with no host
     views. It references ONLY CMS shell client resources (ShellCore / ShellCoreLightTheme) and the
-    EPiServer <platform-navigation /> tag helper — never any consuming-site asset (e.g. Foundation's
+    EPiServer <platform-navigation /> tag helper - never any consuming-site asset (e.g. Foundation's
     wwwroot vendor scripts). The React SPA brings its own styles/JS.
 
     It lives under a module-unique folder (Views/VariationsAuditor/) and is selected explicitly by the
@@ -21,7 +21,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Variations Auditor</title>
 
-    @* CMS 13 shell resources required by <platform-navigation /> — provided by the host's CMS UI packages. *@
+    @* CMS 13 shell resources required by <platform-navigation /> - provided by the host's CMS UI packages. *@
     @ClientResources.RenderResources("ShellCore")
     @ClientResources.RenderResources("ShellCoreLightTheme")
 

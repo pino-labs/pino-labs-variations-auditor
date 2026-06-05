@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ['./index.html', './src/**/*.{ts,tsx}'],
-  // CRITICAL UI ISOLATION — Tailwind's global reset (preflight) would destroy the EPiServer host shell
+  // CRITICAL UI ISOLATION - Tailwind's global reset (preflight) would destroy the EPiServer host shell
   // (Dojo / On-Page Editing). Disable preflight and namespace every utility with a prefix so nothing
   // leaks into the host UI.
   corePlugins: {
@@ -20,7 +20,7 @@ export default {
           600: '#3b54d6',
           700: '#2f43b0',
         },
-        // soft enterprise red — reserved for genuine errors & destructive actions only
+        // soft enterprise red - reserved for genuine errors & destructive actions only
         // (failed operations, the delete/danger button, removed blocks). Routine divergence
         // (Outdated Override / stale / Orphan) uses the warning family (amber/orange) instead.
         risk: {

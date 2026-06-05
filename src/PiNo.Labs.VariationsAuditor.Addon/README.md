@@ -1,6 +1,6 @@
 # PiNo.Labs.VariationsAuditor.Addon
 
-> ⚠️ **Experimental / preview release (`0.0.1-experimental`) — not production-ready.** APIs, behaviour and
+> ⚠️ **Experimental / preview release (`0.0.1-experimental`) - not production-ready.** APIs, behaviour and
 > packaging may change without notice. Published as a NuGet pre-release.
 
 An Optimizely CMS 13 shell add-on that audits content variations across the whole site.
