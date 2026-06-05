@@ -43,7 +43,7 @@ jobs:
         run: npm run build
 
       - name: Restore
-        run: dotnet restore PiNo.Labs.VariationsAuditor.sln
+        run: dotnet restore PiNo.Labs.VariationsAuditor.sln --configfile nuget.config
 
       - name: Test
         run: dotnet test PiNo.Labs.VariationsAuditor.sln -c Release --no-restore
