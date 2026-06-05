@@ -4,6 +4,7 @@ obj/
 
 # EPiServer/Optimizely build artifacts: the CMS build targets unpack shell modules
 # (CMS, Shell, Settings, Profile, TinyMce, VisitorGroups, ...) into this folder during build.
-# Only the source module.config under contentFiles/ is part of the package - never these.
-modules/
+# Anchored to the project root so it does NOT match the packaged source module.config under
+# contentFiles/any/any/modules/_protected/, which must be committed and shipped in the package.
+/modules/
 
