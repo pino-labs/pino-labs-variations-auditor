@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>PiNo.Labs.VariationsAuditor.Research</RootNamespace>
+    <AssemblyName>variations-research</AssemblyName>
+    <!-- Standalone research harness; intentionally NOT part of the add-on build. -->
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+</Project>
+
